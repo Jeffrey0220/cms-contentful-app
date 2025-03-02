@@ -1,7 +1,8 @@
 //@ts-ignore
 // export { enableDraftHandler as GET } from "@contentful/vercel-nextjs-toolkit/app-router";
 import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers"; // Import cookies helper for setting _vercel_jwt
+import { cookies } from "next/headers";
+import { revalidatePath } from "next/cache"; // Ensure revalidation
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
@@ -16,12 +17,15 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ message: "Missing slug" }, { status: 400 });
   }
 
-  // Set the _vercel_jwt cookie to enable preview mode
+  // Set _vercel_jwt cookie
   cookies().set("_vercel_jwt", "your-preview-token-here", {
     httpOnly: true,
     secure: true,
   });
 
-  // Redirect to the preview page
+  // Force revalidation of the preview page
+  revalidatePath(`/posts/${slug}`);
+
+  // Redirect to preview page
   return NextResponse.redirect(new URL(`/posts/${slug}?preview=true`, req.url));
 }
