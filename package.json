@@ -16,6 +16,7 @@
     "@types/react-dom": "^18.2.7",
     "autoprefixer": "10.4.15",
     "contentful-import": "^9.0.4",
+    "cookies-next": "^4.1.1",
     "date-fns": "2.30.0",
     "next": "latest",
     "postcss": "8.4.31",
